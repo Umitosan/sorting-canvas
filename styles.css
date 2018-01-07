@@ -19,4 +19,14 @@ body {
   border-width: 4px;
   border-style: solid;
   border-radius: 10px;
+  margin: 10px;
+}
+
+.btn-group1 {
+  text-align: block;
+}
+
+.btn1, .btn2, .btn3 {
+  background-color: yellow;
+  height: 32px;
 }
