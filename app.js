@@ -1,23 +1,35 @@
 
 
 function draw() {
+
   var canvas = document.getElementById('canvas');
+
   if (canvas.getContext) {
+
     var ctx = canvas.getContext('2d');
 
-    ctx.fillStyle = 'rgb(200, 0, 0)';
-    ctx.fillRect(10, 10, 50, 50);
+    var ctx1 = 'rgb(200, 0, 0)';
+    var ctx2 = 'rgba(0, 0, 200, 0.5)';
 
-    ctx.fillStyle = 'rgba(0, 0, 200, 0.5)';
-    ctx.fillRect(30, 30, 50, 50);
+    var x = 10;
+    var y = 10;
+    var width = 50;
+    var height = 50;
 
-    ctx.fillStyle = 'rgb(200, 0, 0)';
-    ctx.fillRect(50, 50, 50, 50);
+    // fillRect(x, y, width, height)
 
-    ctx.fillStyle = 'rgba(0, 0, 200, 0.5)';
-    ctx.fillRect(70, 70, 50, 50);
-  }
-}
+    for (var i = 0; i < 5 ;i++) {
+      if ((i % 2) === 0) {
+        ctx.fillStyle = ctx1;
+      } else {
+        ctx.fillStyle = ctx2;
+      }
+      ctx.fillRect(x+(i*20), y+(i*20), width, height);
+    } // end for
+
+  } // end if
+
+} // end draw
 
 
 $(document).ready(function(){
