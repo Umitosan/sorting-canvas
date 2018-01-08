@@ -30,6 +30,11 @@
   text-align: center;
 }
 
+.mc2 p  {
+  display: inline-block;
+  margin-left: 30px;
+}
+
 
 .canvas-container {
   width: 900px;
@@ -55,6 +60,6 @@
 }
 
 .btn1, .btn2, .btn3 {
-  background-color: yellow;
+  background-color: lightblue;
   height: 32px;
 }
