@@ -39,7 +39,6 @@
   font-size: 26px;
 }
 
-
 .canvas-container {
   width: 900px;
   margin-left: auto;
@@ -63,8 +62,11 @@
   text-align: block;
 }
 
-.btn1, .btn2, .btn3, .btn4 {
+.btn0, .btn1, .btn2, .btn3, .btn4 {
   height: 32px;
+}
+.btn0 {
+  background-color: lightblue;
 }
 .btn1 {
   background-color: lightblue;
