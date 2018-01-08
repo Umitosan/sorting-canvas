@@ -135,27 +135,35 @@ $(document).ready(function() {
 
   var gameInterval = undefined;
 
-  $('.btn0').click(function() {
+  $('.init').click(function() {
+    console.log('init');
     bubbleStack.init();
   });
 
-  $('.btn1').click(function() {
+  $('.draw').click(function() {
+    console.log('draw');
     gameInterval = setInterval(gameLoop, 17);
   });
 
-  $('.btn2').click(function() {
+  $('.sort').click(function() {
+    console.log('sort');
+  });
+
+  $('.clear').click(function() {
     clearCanvas();
     clearInterval(gameInterval);
     bubbleStack.baseArr = [];
   });
 
   $('.btn3').click(function() {
+    console.log('btn3');
     // setInterval(draw3, 17);
   });
 
   $('.btn4').click(function() {
-    x3 = 50;
-    y3 = 150;
+    console.log('btn4');
+    // x3 = 50;
+    // y3 = 150;
   });
 
 });

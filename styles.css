@@ -62,18 +62,15 @@
   text-align: block;
 }
 
-.btn0, .btn1, .btn2, .btn3, .btn4 {
+.init, .draw, .sort, .clear, .draw3, .reset3 {
   height: 32px;
 }
-.btn0 {
+.init, .draw, .sort {
   background-color: lightblue;
 }
-.btn1 {
-  background-color: lightblue;
-}
-.btn2 {
+.clear {
   background-color: white;
 }
-.btn3, .btn4 {
+.draw3, .reset3 {
   background-color: lightgreen;
 }
