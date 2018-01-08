@@ -19,8 +19,10 @@ function Stack() {
   this.x = 5;
   this.y = 360;
   this.baseArr = [];
+
   // init randomizes the initial bar lengths
   this.init = function() {
+    clearCanvas();
     this.baseArr = [];
     // fill the the array with random but unique intergers
     while (this.baseArr.length < 72) {
@@ -31,6 +33,7 @@ function Stack() {
     }
     console.log('this.baseArr = ', this.baseArr);
   }
+
   this.draw = function() {
     var ctx = canvas.getContext('2d');
     // draw each bar one at a time
@@ -40,6 +43,19 @@ function Stack() {
       ctx.fillRect((4+i*11), 399, 10, this.baseArr[i]*-1);
     } // for
   } // draw
+
+  // look at each pair once from bottom to top and swap them if needed
+  this.pass1 = function() {
+    clearCanvas();
+    for (var i = 0; i < this.baseArr.length; i++) {
+      var leftVal = this.baseArr[i];
+      var rightVal = this.baseArr[i+1];
+      if (leftVal > rightVal) {
+        this.baseArr[i+1] = leftVal;
+        this.baseArr[i] = rightVal;
+      }
+    } // for
+  } // pass1
 } // stack
 
 function getRandomIntInclusive(min, max) {
@@ -55,20 +71,11 @@ var canvasWidth = 800;
 
 var canvas = undefined; // canvas must be defined here for backend functions
 
-// var x1 = 10;
-// var y1 = 10;
-// var x3 = 20;
-// var y3 = 150;
-// var xVel3 = 10;
-// var boxWidth = 50;
-// var boxHeight = 50;
-
 var time = 0;
 
 function gameLoop() {
   bubbleStack.draw();
 }
-
 
 // function draw1() {
 //   if (canvas.getContext) {
@@ -155,15 +162,13 @@ $(document).ready(function() {
     bubbleStack.baseArr = [];
   });
 
-  $('.btn3').click(function() {
-    console.log('btn3');
-    // setInterval(draw3, 17);
+  $('.step').click(function() {
+    console.log('step');
   });
 
-  $('.btn4').click(function() {
-    console.log('btn4');
-    // x3 = 50;
-    // y3 = 150;
+  $('.pass1').click(function() {
+    console.log('pass1');
+    bubbleStack.pass1();
   });
 
 });
