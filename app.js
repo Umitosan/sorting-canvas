@@ -14,16 +14,22 @@ function Colors() {
   this.blue = 'rgba(0, 0, 200, 0.5)';
 }
 
+// a stack is a group of bars to be sorted
 function Stack() {
   this.x = 5;
   this.y = 360;
   this.baseArr = [];
+  // init randomizes the initial bar lengths
   this.init = function() {
-    console.log('stack init');
+    this.baseArr = [];
     // fill the the array with random but unique intergers
-    while (this.baseArr.length < 70) {
-      this.baseArr.push();
+    while (this.baseArr.length < 72) {
+      var myRand = getRandomIntInclusive(1,396);
+      if (this.baseArr.includes(myRand) === false) {
+        this.baseArr.push(myRand);
+      }
     }
+    console.log('this.baseArr = ', this.baseArr);
   }
   this.draw = function() {
     var ctx = canvas.getContext('2d');
@@ -31,7 +37,7 @@ function Stack() {
     for (var i = 0; i < this.baseArr.length; i++) {
       ctx.fillStyle = myColors.red;
       // fillRect(x, y, width, height)
-      ctx.fillRect((11+i*11), 370, 10, this.baseArr[i]);
+      ctx.fillRect((4+i*11), 399, 10, this.baseArr[i]*-1);
     } // for
   } // draw
 } // stack
@@ -44,9 +50,9 @@ function getRandomIntInclusive(min, max) {
 
 var myColors = new Colors();
 var bubbleStack = new Stack();
-bubbleStack.init();
 
 var canvasWidth = 800;
+
 var canvas = undefined; // canvas must be defined here for backend functions
 
 // var x1 = 10;
@@ -130,16 +136,17 @@ $(document).ready(function() {
   var gameInterval = undefined;
 
   $('.btn0').click(function() {
-    gameInterval = setInterval(gameLoop, 17);
+    bubbleStack.init();
   });
 
   $('.btn1').click(function() {
-
+    gameInterval = setInterval(gameLoop, 17);
   });
 
   $('.btn2').click(function() {
     clearCanvas();
     clearInterval(gameInterval);
+    bubbleStack.baseArr = [];
   });
 
   $('.btn3').click(function() {
