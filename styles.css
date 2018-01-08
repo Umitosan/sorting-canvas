@@ -35,6 +35,10 @@
   margin-left: 30px;
 }
 
+#clock {
+  font-size: 26px;
+}
+
 
 .canvas-container {
   width: 900px;
@@ -59,7 +63,15 @@
   text-align: block;
 }
 
-.btn1, .btn2, .btn3 {
-  background-color: lightblue;
+.btn1, .btn2, .btn3, .btn4 {
   height: 32px;
+}
+.btn1 {
+  background-color: lightblue;
+}
+.btn2 {
+  background-color: white;
+}
+.btn3, .btn4 {
+  background-color: lightgreen;
 }
