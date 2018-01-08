@@ -4,6 +4,9 @@
 // basic shapes
 // https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Drawing_shapes
 
+// list of common functions
+// https://www.w3schools.com/tags/ref_canvas.asp
+
 // 1. First, you create the path.
 // 2. Then you use drawing commands to draw into the path.
 // 3. Once the path has been created, you can stroke or fill the path to render it.

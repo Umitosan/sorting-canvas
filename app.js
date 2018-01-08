@@ -28,7 +28,6 @@ function draw() {
   } // end if
 } // end draw
 
-
 function clearCanvas() {
   // var canvas = document.getElementById('canvas');
   var canvas = $('#canvas')[0];
