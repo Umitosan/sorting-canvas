@@ -62,15 +62,15 @@
   text-align: block;
 }
 
-.init, .draw, .sort, .clear, .step, .pass1 {
+.init, .draw, .sort, .reset, .step, .pass {
   height: 32px;
 }
 .init, .draw, .sort {
   background-color: lightblue;
 }
-.clear {
+.reset {
   background-color: white;
 }
-.step, .pass1 {
+.step, .pass {
   background-color: lightgreen;
 }

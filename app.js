@@ -1,7 +1,13 @@
 
+
+var myColors = new Colors();
+var bubbleStack = new Stack();
+var canvasWidth = 800;
+var canvas = undefined; // canvas must be defined here for backend functions
+var time = 0;
+
 // see this for html names colors
 // https://www.w3schools.com/colors/colors_shades.asp
-
 // all colors to be used with the canvas functions
 function Colors() {
   this.black = 'rgba(0, 0, 0, 1)';
@@ -9,16 +15,25 @@ function Colors() {
   this.lightGreyTrans = 'rgba(50, 50, 50, 0.3)';
   this.greyReset = 'rgb(211,211,211)';
   this.white = 'rgba(250, 250, 250, 1)';
-  this.red = 'rgba(200, 0, 0, 0.5)';
+  this.red = 'rgba(200, 0, 0, 1)';
   this.green = 'rgba(0, 200, 0, 0.5)';
   this.blue = 'rgba(0, 0, 200, 0.5)';
 }
 
+// a bar is single Bar object in a Stack
+function Bar() {
+  this.color = myColors.red;
+  this.x = 0;
+  this.y = 399;
+  this.height = 0;
+  this.width = 11;
+}
+
 // a stack is a group of bars to be sorted
 function Stack() {
-  this.x = 5;
-  this.y = 360;
   this.baseArr = [];
+  this.passON = false;
+  this.sorted = false;
 
   // init randomizes the initial bar lengths
   this.init = function() {
@@ -31,7 +46,7 @@ function Stack() {
         this.baseArr.push(myRand);
       }
     }
-    console.log('this.baseArr = ', this.baseArr);
+    // console.log('this.baseArr = ', this.baseArr);
   }
 
   this.draw = function() {
@@ -45,7 +60,7 @@ function Stack() {
   } // draw
 
   // look at each pair once from bottom to top and swap them if needed
-  this.pass1 = function() {
+  this.pass = function() {
     clearCanvas();
     for (var i = 0; i < this.baseArr.length; i++) {
       var leftVal = this.baseArr[i];
@@ -55,7 +70,7 @@ function Stack() {
         this.baseArr[i] = rightVal;
       }
     } // for
-  } // pass1
+  } // pass
 } // stack
 
 function getRandomIntInclusive(min, max) {
@@ -64,16 +79,10 @@ function getRandomIntInclusive(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min; //The maximum is inclusive and the minimum is inclusive
 }
 
-var myColors = new Colors();
-var bubbleStack = new Stack();
-
-var canvasWidth = 800;
-
-var canvas = undefined; // canvas must be defined here for backend functions
-
-var time = 0;
-
 function gameLoop() {
+  if (bubbleStack.passON === true) {
+    bubbleStack.pass()
+  }
   bubbleStack.draw();
 }
 
@@ -98,7 +107,6 @@ function gameLoop() {
 //     } // end for
 //   } // end if
 // } // end draw
-
 // function draw3() {
 //   if (canvas.getContext) {
 //     var ctx = canvas.getContext('2d');
@@ -119,11 +127,9 @@ function gameLoop() {
 // }
 
 function clearCanvas() {
-  // var canvas = document.getElementById('canvas');
-  var canvas = $('#canvas')[0];
+  var canvas = $('#canvas')[0]; // var canvas = document.getElementById('canvas');
   canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
 }
-
 
 function clockTimer() {
   time += 1;
@@ -131,9 +137,9 @@ function clockTimer() {
 }
 
 
+////////////////////////////////////////////
 // FRONT
-// FRONT
-// FRONT
+////////////////////////////////////////////
 $(document).ready(function() {
   // canvas is instantiated above to be global
   canvas = $('#canvas')[0];
@@ -145,30 +151,31 @@ $(document).ready(function() {
   $('.init').click(function() {
     console.log('init');
     bubbleStack.init();
+    gameInterval = setInterval(gameLoop, 102);
   });
 
   $('.draw').click(function() {
     console.log('draw');
-    gameInterval = setInterval(gameLoop, 17);
   });
 
   $('.sort').click(function() {
     console.log('sort');
   });
 
-  $('.clear').click(function() {
+  $('.reset').click(function() {
     clearCanvas();
     clearInterval(gameInterval);
     bubbleStack.baseArr = [];
+    bubbleStack.passON = false;
   });
 
   $('.step').click(function() {
     console.log('step');
   });
 
-  $('.pass1').click(function() {
-    console.log('pass1');
-    bubbleStack.pass1();
+  $('.pass').click(function() {
+    console.log('pass');
+    bubbleStack.passON = true;
   });
 
 });
