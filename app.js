@@ -45,9 +45,8 @@ function Stack() {
       if (this.baseArr.includes(myRand) === false) {
         this.baseArr.push(myRand);
       }
-    }
-    // console.log('this.baseArr = ', this.baseArr);
-  }
+    } // while
+  } // init
 
   this.draw = function() {
     var ctx = canvas.getContext('2d');
@@ -58,6 +57,12 @@ function Stack() {
       ctx.fillRect((4+i*11), 399, 10, this.baseArr[i]*-1);
     } // for
   } // draw
+
+  this.update = function() {
+    if (this.passON === true) {
+      this.pass()
+    }
+  }
 
   // look at each pair once from bottom to top and swap them if needed
   this.pass = function() {
@@ -79,14 +84,13 @@ function getRandomIntInclusive(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min; //The maximum is inclusive and the minimum is inclusive
 }
 
+//////////////////////////////////////////////////////////////////////////////////
 function gameLoop() {
-  update();
-  if (bubbleStack.passON === true) {
-    bubbleStack.pass()
-  }
+  bubbleStack.update();
   bubbleStack.draw();
   requestAnimationFrame(gameLoop);
 }
+//////////////////////////////////////////////////////////////////////////////////
 
 // function draw1() {
 //   if (canvas.getContext) {
@@ -127,10 +131,6 @@ function gameLoop() {
 //     ctx.fillRect(x3, y3, boxWidth, boxHeight);
 //   }
 // }
-
-function update() {
-  // sick code
-}
 
 function clearCanvas() {
   var canvas = $('#canvas')[0]; // var canvas = document.getElementById('canvas');
