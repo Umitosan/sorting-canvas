@@ -80,10 +80,12 @@ function getRandomIntInclusive(min, max) {
 }
 
 function gameLoop() {
+  update();
   if (bubbleStack.passON === true) {
     bubbleStack.pass()
   }
   bubbleStack.draw();
+  requestAnimationFrame(gameLoop);
 }
 
 // function draw1() {
@@ -126,6 +128,10 @@ function gameLoop() {
 //   }
 // }
 
+function update() {
+  // sick code
+}
+
 function clearCanvas() {
   var canvas = $('#canvas')[0]; // var canvas = document.getElementById('canvas');
   canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
@@ -147,11 +153,13 @@ $(document).ready(function() {
   setInterval(clockTimer, 1000);
 
   var gameInterval = undefined;
+  var animFrame = undefined;
 
   $('.init').click(function() {
     console.log('init');
     bubbleStack.init();
-    gameInterval = setInterval(gameLoop, 102);
+    // gameInterval = setInterval(gameLoop, 102);
+    animFrame = requestAnimationFrame(gameLoop);
   });
 
   $('.draw').click(function() {
@@ -164,7 +172,8 @@ $(document).ready(function() {
 
   $('.reset').click(function() {
     clearCanvas();
-    clearInterval(gameInterval);
+    // clearInterval(gameInterval);
+    window.cancelAnimationFrame(animFrame);
     bubbleStack.baseArr = [];
     bubbleStack.passON = false;
   });
