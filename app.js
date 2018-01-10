@@ -105,47 +105,6 @@ function gameLoop() {
 }
 //////////////////////////////////////////////////////////////////////////////////
 
-// function draw1() {
-//   if (canvas.getContext) {
-//     var ctx = canvas.getContext('2d');
-//     // clear old boxes
-//     ctx.fillStyle = fGreyReset;
-//     for (var i = 0; i < 35 ;i++) {
-//       ctx.fillRect(x1+(i*20), y1+(i*10), boxWidth, boxHeight);
-//     }
-//     for (var i = 0; i < 35 ;i++) {
-//       // alternate between color boxes
-//       if ( ((i % 2) === 0) && ((i % 3) !== 0) ) {
-//         ctx.fillStyle = fBlue;
-//       } else if ((i % 3) === 0) {
-//         ctx.fillStyle = fGreen;
-//       } else {
-//         ctx.fillStyle = fRed;
-//       }
-//       ctx.fillRect(x1+(i*20), y1+(i*10), boxWidth, boxHeight);
-//     } // end for
-//   } // end if
-// } // end draw
-//
-// function draw3() {
-//   if (canvas.getContext) {
-//     var ctx = canvas.getContext('2d');
-//     // clear old box
-//     ctx.fillStyle = fGreyReset;
-//     ctx.fillRect(x3, y3, boxWidth, boxHeight);
-//     // change velocity if needed
-//     if (x3+10+boxWidth > canvasWidth) {
-//       xVel3 = -10;
-//     } else if (x3-10 < 0) {
-//       xVel3 = 10;
-//     }
-//     // move box
-//     x3 += xVel3;
-//     ctx.fillStyle = flightGreyTrans;
-//     ctx.fillRect(x3, y3, boxWidth, boxHeight);
-//   }
-// }
-
 function clearCanvas() {
   var canvas = $('#canvas')[0]; // var canvas = document.getElementById('canvas');
   canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
@@ -171,11 +130,9 @@ $(document).ready(function() {
 
   $('.init').click(function() {
     console.log('init');
+    bubbleStack.reset();
     bubbleStack.init();
     gameLoop();
-  });
-
-  $('.draw').click(function() {
   });
 
   $('.sort').click(function() {
