@@ -31,46 +31,57 @@ function Bar() {
 
 // a stack is a group of bars to be sorted
 function Stack() {
-  this.baseArr = [];
+  this.heightArr = [];
+  this.barArr = [];
   this.sorted = false;
   this.sortON = false;
-  this.sortCount = 72;
+  this.sortCount = 71;
 
   // init adds random bars to the stack
   this.init = function() {
     clearCanvas();
-    this.baseArr = [];
+    this.heightArr = [];
+    this.barArr = [];
     // fill the the array with random but unique intergers
-    while (this.baseArr.length < 72) {
+    while (this.heightArr.length < 71) {
       var myRand = getRandomIntInclusive(1,396);
-      if (this.baseArr.includes(myRand) === false) {
-        this.baseArr.push(myRand);
+      if (this.heightArr.includes(myRand) === false) {
+        var newBar = new Bar();
+        newBar.height = myRand;
+        this.heightArr.push(myRand);
+        this.barArr.push(newBar);``
       }
     } // while
+    // console.log("this.barArr = ", this.barArr);
   } // init
 
   this.draw = function() {
     clearCanvas();
     var ctx = canvas.getContext('2d');
     // draw each bar one at a time
-    for (var i = 0; i < this.baseArr.length; i++) {
-      ctx.fillStyle = myColors.red;
+    for (var i = 0; i < this.barArr.length; i++) {
+      ctx.fillStyle = this.barArr[i].color;
       // fillRect(x, y, width, height)
-      ctx.fillRect((4+i*11), 399, 10, this.baseArr[i]*-1);
+      ctx.fillRect((4+i*11), 399, 10, this.barArr[i].height*-1);
     } // for
   } // draw
 
   // look at each pair once from bottom to top and swap them if needed
   this.update = function() {
     var swapCount = 0;
-    for (var i = 0; i < this.baseArr.length; i++) {
-      var leftVal = this.baseArr[i];
-      var rightVal = this.baseArr[i+1];
-      if (leftVal > rightVal) {
-        this.baseArr[i+1] = leftVal;
-        this.baseArr[i] = rightVal;
+    for (var i = 0; i < this.barArr.length-1; i++) { // rem! length-1
+      this.barArr[i].color = myColors.green;
+      this.barArr[i+1].color = myColors.green;
+
+      var leftVal = this.barArr[i];
+      var rightVal = this.barArr[i+1];
+      if (leftVal.height > rightVal.height) {
+        this.barArr[i+1] = leftVal;
+        this.barArr[i] = rightVal;
         swapCount += 1;
       }
+      this.barArr[i].color = myColors.red;
+      this.barArr[i+1].color = myColors.red;
     } // for
     if (swapCount < 1) {
       this.sorted = true;
@@ -79,9 +90,10 @@ function Stack() {
   } // pass
 
   this.reset = function() {
-    this.baseArr = [];
+    this.heightArr = [];
+    this.barArr = [];
     this.sorted = false;
-    this.sortCount = 72;
+    this.sortCount = 71;
     this.sortON = false;
   }
 
@@ -93,18 +105,6 @@ function getRandomIntInclusive(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min; //The maximum is inclusive and the minimum is inclusive
 }
 
-//////////////////////////////////////////////////////////////////////////////////
-function gameLoop() {
-  bubbleStack.draw();
-  if ( (bubbleStack.sorted === false) && (bubbleStack.sortON === true) ) {
-    bubbleStack.update();
-    requestAnimationFrame(gameLoop);
-  } else {
-    return;
-  }
-}
-//////////////////////////////////////////////////////////////////////////////////
-
 function clearCanvas() {
   var canvas = $('#canvas')[0]; // var canvas = document.getElementById('canvas');
   canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
@@ -115,10 +115,23 @@ function clockTimer() {
   $('#clock').text(time);
 }
 
+//////////////////////////////////////////////////////////////////////////////////
+// GAME LOOP
+//////////////////////////////////////////////////////////////////////////////////
+function gameLoop() {
+  bubbleStack.draw();
+  if ( (bubbleStack.sorted === false) && (bubbleStack.sortON === true) ) {
+    bubbleStack.update();
+    requestAnimationFrame(gameLoop);
+  } else {
+    return;
+  }
+}
 
-////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////////
 // FRONT
-////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
 $(document).ready(function() {
   // canvas is instantiated above to be global
   canvas = $('#canvas')[0];
@@ -126,7 +139,6 @@ $(document).ready(function() {
   setInterval(clockTimer, 1000);
 
   var gameInterval = undefined;
-  // var animFrame = undefined;
 
   $('.init').click(function() {
     console.log('init');
@@ -135,15 +147,9 @@ $(document).ready(function() {
     gameLoop();
   });
 
-  $('.sort').click(function() {
-  });
-
   $('.reset').click(function() {
     clearCanvas();
     bubbleStack.reset();
-  });
-
-  $('.step').click(function() {
   });
 
   $('.start').click(function() {
