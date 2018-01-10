@@ -62,7 +62,7 @@
   text-align: block;
 }
 
-.init, .draw, .sort, .reset, .step, .pass {
+.init, .draw, .sort, .reset, .step, .start {
   height: 32px;
 }
 .init, .draw, .sort {
@@ -71,6 +71,6 @@
 .reset {
   background-color: white;
 }
-.step, .pass {
+.step, .start {
   background-color: lightgreen;
 }

@@ -32,10 +32,11 @@ function Bar() {
 // a stack is a group of bars to be sorted
 function Stack() {
   this.baseArr = [];
-  this.passON = false;
   this.sorted = false;
+  this.sortON = false;
+  this.sortCount = 72;
 
-  // init randomizes the initial bar lengths
+  // init adds random bars to the stack
   this.init = function() {
     clearCanvas();
     this.baseArr = [];
@@ -49,6 +50,7 @@ function Stack() {
   } // init
 
   this.draw = function() {
+    clearCanvas();
     var ctx = canvas.getContext('2d');
     // draw each bar one at a time
     for (var i = 0; i < this.baseArr.length; i++) {
@@ -58,24 +60,31 @@ function Stack() {
     } // for
   } // draw
 
-  this.update = function() {
-    if (this.passON === true) {
-      this.pass()
-    }
-  }
-
   // look at each pair once from bottom to top and swap them if needed
-  this.pass = function() {
-    clearCanvas();
+  this.update = function() {
+    var swapCount = 0;
     for (var i = 0; i < this.baseArr.length; i++) {
       var leftVal = this.baseArr[i];
       var rightVal = this.baseArr[i+1];
       if (leftVal > rightVal) {
         this.baseArr[i+1] = leftVal;
         this.baseArr[i] = rightVal;
+        swapCount += 1;
       }
     } // for
+    if (swapCount < 1) {
+      this.sorted = true;
+      this.sortON = false;
+    }
   } // pass
+
+  this.reset = function() {
+    this.baseArr = [];
+    this.sorted = false;
+    this.sortCount = 72;
+    this.sortON = false;
+  }
+
 } // stack
 
 function getRandomIntInclusive(min, max) {
@@ -86,9 +95,13 @@ function getRandomIntInclusive(min, max) {
 
 //////////////////////////////////////////////////////////////////////////////////
 function gameLoop() {
-  bubbleStack.update();
   bubbleStack.draw();
-  requestAnimationFrame(gameLoop);
+  if ( (bubbleStack.sorted === false) && (bubbleStack.sortON === true) ) {
+    bubbleStack.update();
+    requestAnimationFrame(gameLoop);
+  } else {
+    return;
+  }
 }
 //////////////////////////////////////////////////////////////////////////////////
 
@@ -113,6 +126,7 @@ function gameLoop() {
 //     } // end for
 //   } // end if
 // } // end draw
+//
 // function draw3() {
 //   if (canvas.getContext) {
 //     var ctx = canvas.getContext('2d');
@@ -153,38 +167,32 @@ $(document).ready(function() {
   setInterval(clockTimer, 1000);
 
   var gameInterval = undefined;
-  var animFrame = undefined;
+  // var animFrame = undefined;
 
   $('.init').click(function() {
     console.log('init');
     bubbleStack.init();
-    // gameInterval = setInterval(gameLoop, 102);
-    animFrame = requestAnimationFrame(gameLoop);
+    gameLoop();
   });
 
   $('.draw').click(function() {
-    console.log('draw');
   });
 
   $('.sort').click(function() {
-    console.log('sort');
   });
 
   $('.reset').click(function() {
     clearCanvas();
-    // clearInterval(gameInterval);
-    window.cancelAnimationFrame(animFrame);
-    bubbleStack.baseArr = [];
-    bubbleStack.passON = false;
+    bubbleStack.reset();
   });
 
   $('.step').click(function() {
-    console.log('step');
   });
 
-  $('.pass').click(function() {
-    console.log('pass');
-    bubbleStack.passON = true;
+  $('.start').click(function() {
+    console.log('start');
+    bubbleStack.sortON = true;
+    gameLoop();
   });
 
 });
