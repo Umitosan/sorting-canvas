@@ -1,14 +1,14 @@
 
 
 var myColors = new Colors(),
-bubbleStack = new Stack(10);
+    bubbleStack = new Stack(20);
 
 var canvasWidth = 800,
     canvas = undefined, // canvas must be defined here for backend functions
     time = 0;
     myReq = undefined,
     lastFrameTimeMs = 0, // The last time the loop was run
-    maxFPS = 300, // The maximum FPS we want to allow
+    maxFPS = 60, // The maximum FPS we want to allow
     loopRunning = false;
 
 // see this for html names colors
@@ -95,19 +95,19 @@ function Stack(size) {
       this.swapCount += 1;
     }
 
-    if ( (i > (this.size - 3)) && (this.swapCount < 0) ) {
+    if ( (i > (this.size - 3 - this.passCount)) && (this.swapCount < 1) ) {
       console.log("Sorting Complete!");
       this.sorted = true;
       loopRunning = false;
       this.barArr[i].color = myColors.red;
       this.barArr[i+1].color = myColors.red;
-    } else if (i > (this.size - 3)) {
+    } else if (i > (this.size - 3 - this.passCount)) {  // Start a new pass on the stack
       this.barArr[i].color = myColors.red;
       this.barArr[i+1].color = myColors.red;
       this.passCount += 1;
       this.sortingIndex = 0;
+      console.log('swapCount = ', this.swapCount);
       this.swapCount = 0;
-      console.log('passCount = ', this.passCount);
     } else {
       this.sortingIndex += 1;
     }
