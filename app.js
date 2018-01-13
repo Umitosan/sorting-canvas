@@ -123,31 +123,19 @@ function clockTimer() {
 // GAME LOOP
 //////////////////////////////////////////////////////////////////////////////////
 
+
 function gameLoop(timestamp) {
+    // Throttle the frame rate.
+    if (timestamp < lastFrameTimeMs + (1000 / maxFPS)) {
+        requestAnimationFrame(gameLoop);
+        return;
+    }
 
-  // Throttle the frame rate.
-  if (timestamp < lastFrameTimeMs + (1000 / maxFPS)) {
-    myReq = requestAnimationFrame(gameLoop);
-    return;
-  }
-
-  if ( (bubbleStack.sorted === false) && (bubbleStack.sortON === true) ) {
-    console.log("update and draw");
     lastFrameTimeMs = timestamp;
-    bubbleStack.update();
+    if ( (bubbleStack.sorted === false) && (bubbleStack.sortON === true) ) { bubbleStack.update() };
     bubbleStack.draw();
     myReq = requestAnimationFrame(gameLoop);
-    return;
-  } else {
-    console.log("just draw");
-    lastFrameTimeMs = timestamp;
-    bubbleStack.draw();
-    myReq = requestAnimationFrame(gameLoop)
-    return;
-  }
-
 }
-
 
 //////////////////////////////////////////////////////////////////////////////////
 // FRONT
@@ -164,7 +152,7 @@ $(document).ready(function() {
     console.log('init');
     bubbleStack.reset();
     bubbleStack.init();
-    gameLoop();
+    myReq = requestAnimationFrame(gameLoop)
   });
 
   $('.reset').click(function() {
