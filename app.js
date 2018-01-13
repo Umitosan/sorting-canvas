@@ -1,14 +1,15 @@
 
 
 var myColors = new Colors(),
-    bubbleStack = new Stack(),
-    canvasWidth = 800,
+bubbleStack = new Stack(10);
+
+var canvasWidth = 800,
     canvas = undefined, // canvas must be defined here for backend functions
     time = 0;
-    myReq = undefined;
-
-var lastFrameTimeMs = 0, // The last time the loop was run
-    maxFPS = 1000; // The maximum FPS we want to allow
+    myReq = undefined,
+    lastFrameTimeMs = 0, // The last time the loop was run
+    maxFPS = 300, // The maximum FPS we want to allow
+    loopRunning = false;
 
 // see this for html names colors
 // https://www.w3schools.com/colors/colors_shades.asp
@@ -34,12 +35,13 @@ function Bar() {
 }
 
 // a stack is a group of bars to be sorted
-function Stack() {
+function Stack(size) {
+  this.size = size;
   this.heightArr = [];
   this.barArr = [];
   this.sorted = false;
-  this.sortON = false;
-  this.sortCount = undefined;
+  this.swapCount = undefined;
+  this.passCount = undefined;
   this.bar1 = undefined;
   this.bar2 = undefined;
   this.sortingIndex = 0;
@@ -48,7 +50,9 @@ function Stack() {
   this.init = function() {
     console.log('init funk run');
     // fill the the array with random but unique intergers
-    while (this.heightArr.length < 72) {
+    this.swapCount = 0;
+    this.passCount = 0;
+    while (this.heightArr.length < this.size) {
       var myRand = getRandomIntInclusive(1,396);
       if (this.heightArr.includes(myRand) === false) {
         var newBar = new Bar();
@@ -74,7 +78,7 @@ function Stack() {
   // 1 update call only sorts 1 pair of bars in the stack
   this.update = function() {
     var i = this.sortingIndex;
-    console.log('index = ', i);
+    // console.log('this.swapCount = ', this.swapCount);
 
     if (i > 0) {  // turn last bars back to red
       this.barArr[i].color = myColors.red;
@@ -91,14 +95,19 @@ function Stack() {
       this.swapCount += 1;
     }
 
-    if (this.swapCount < 1) {
+    if ( (i > (this.size - 3)) && (this.swapCount < 0) ) {
       console.log("Sorting Complete!");
       this.sorted = true;
-      this.sortON = false;
-    } else if (i > 69) {
+      loopRunning = false;
       this.barArr[i].color = myColors.red;
       this.barArr[i+1].color = myColors.red;
+    } else if (i > (this.size - 3)) {
+      this.barArr[i].color = myColors.red;
+      this.barArr[i+1].color = myColors.red;
+      this.passCount += 1;
       this.sortingIndex = 0;
+      this.swapCount = 0;
+      console.log('passCount = ', this.passCount);
     } else {
       this.sortingIndex += 1;
     }
@@ -106,11 +115,11 @@ function Stack() {
   } // UPDATE
 
   this.reset = function() {
+    loopRunning = false;
     this.heightArr = [];
     this.barArr = [];
     this.sorted = false;
-    this.sortON = false;
-    this.sortCount = undefined;
+    this.swapCount = undefined;
     this.bar1 = undefined;
     this.bar2 = undefined;
     this.sortingIndex = 0;
@@ -148,7 +157,7 @@ function gameLoop(timestamp) {
     }
 
     lastFrameTimeMs = timestamp;
-    if ( (bubbleStack.sorted === false) && (bubbleStack.sortON === true) ) { bubbleStack.update() };
+    if ( (bubbleStack.sorted === false) && (loopRunning === true) ) { bubbleStack.update() };
     bubbleStack.draw();
     myReq = requestAnimationFrame(gameLoop);
 }
@@ -180,7 +189,7 @@ $(document).ready(function() {
 
   $('.start').click(function() {
     console.log('start');
-    bubbleStack.sortON = true;
+    loopRunning = true;
   });
 
 });
