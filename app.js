@@ -8,7 +8,7 @@ var myColors = new Colors(),
     myReq = undefined;
 
 var lastFrameTimeMs = 0, // The last time the loop was run
-    maxFPS = 1; // The maximum FPS we want to allow
+    maxFPS = 10; // The maximum FPS we want to allow
 
 // see this for html names colors
 // https://www.w3schools.com/colors/colors_shades.asp
@@ -127,7 +127,8 @@ function clockTimer() {
 function gameLoop(timestamp) {
     // Throttle the frame rate.
     if (timestamp < lastFrameTimeMs + (1000 / maxFPS)) {
-        requestAnimationFrame(gameLoop);
+        // console.log('timestamp = ', Math.round(timestamp));
+        myReq = requestAnimationFrame(gameLoop);
         return;
     }
 
