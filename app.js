@@ -1,10 +1,14 @@
 
 
-var myColors = new Colors();
-var bubbleStack = new Stack();
-var canvasWidth = 800;
-var canvas = undefined; // canvas must be defined here for backend functions
-var time = 0;
+var myColors = new Colors(),
+    bubbleStack = new Stack(),
+    canvasWidth = 800,
+    canvas = undefined, // canvas must be defined here for backend functions
+    time = 0;
+    myReq = undefined;
+
+var lastFrameTimeMs = 0, // The last time the loop was run
+    maxFPS = 1; // The maximum FPS we want to allow
 
 // see this for html names colors
 // https://www.w3schools.com/colors/colors_shades.asp
@@ -118,14 +122,30 @@ function clockTimer() {
 //////////////////////////////////////////////////////////////////////////////////
 // GAME LOOP
 //////////////////////////////////////////////////////////////////////////////////
-function gameLoop() {
-  bubbleStack.draw();
-  if ( (bubbleStack.sorted === false) && (bubbleStack.sortON === true) ) {
-    bubbleStack.update();
-    requestAnimationFrame(gameLoop);
-  } else {
+
+function gameLoop(timestamp) {
+
+  // Throttle the frame rate.
+  if (timestamp < lastFrameTimeMs + (1000 / maxFPS)) {
+    myReq = requestAnimationFrame(gameLoop);
     return;
   }
+
+  if ( (bubbleStack.sorted === false) && (bubbleStack.sortON === true) ) {
+    console.log("update and draw");
+    lastFrameTimeMs = timestamp;
+    bubbleStack.update();
+    bubbleStack.draw();
+    myReq = requestAnimationFrame(gameLoop);
+    return;
+  } else {
+    console.log("just draw");
+    lastFrameTimeMs = timestamp;
+    bubbleStack.draw();
+    myReq = requestAnimationFrame(gameLoop)
+    return;
+  }
+
 }
 
 
@@ -148,6 +168,7 @@ $(document).ready(function() {
   });
 
   $('.reset').click(function() {
+    cancelAnimationFrame(myReq);
     clearCanvas();
     bubbleStack.reset();
   });
@@ -155,7 +176,6 @@ $(document).ready(function() {
   $('.start').click(function() {
     console.log('start');
     bubbleStack.sortON = true;
-    gameLoop();
   });
 
 });
