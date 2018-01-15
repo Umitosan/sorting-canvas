@@ -1,15 +1,16 @@
 
 
 var myColors = new Colors(),
-    bubbleStack = new Stack(20);
+    bubbleStack = new Stack(72);
 
 var canvasWidth = 800,
     canvas = undefined, // canvas must be defined here for backend functions
     time = 0;
     myReq = undefined,
     lastFrameTimeMs = 0, // The last time the loop was run
-    maxFPS = 60, // The maximum FPS we want to allow
-    loopRunning = false;
+    maxFPS = 600, // The maximum FPS we want to allow
+    loopRunning = false,
+    maxBarHeight = 396;
 
 // see this for html names colors
 // https://www.w3schools.com/colors/colors_shades.asp
@@ -26,12 +27,12 @@ function Colors() {
 }
 
 // a bar is single Bar object in a Stack
-function Bar() {
+function Bar(barWidth) {
   this.color = myColors.red;
   this.x = 0;
   this.y = 399;
   this.height = 0;
-  this.width = 11;
+  this.width = barWidth;
 }
 
 // a stack is a group of bars to be sorted
@@ -44,6 +45,7 @@ function Stack(size) {
   this.passCount = undefined;
   this.bar1 = undefined;
   this.bar2 = undefined;
+  this.barWidth = 10;
   this.sortingIndex = 0;
 
   // init adds random bars to the stack
@@ -53,9 +55,9 @@ function Stack(size) {
     this.swapCount = 0;
     this.passCount = 0;
     while (this.heightArr.length < this.size) {
-      var myRand = getRandomIntInclusive(1,396);
+      var myRand = getRandomIntInclusive(1, maxBarHeight);
       if (this.heightArr.includes(myRand) === false) {
-        var newBar = new Bar();
+        var newBar = new Bar(this.barWidth);
         newBar.height = myRand;
         this.heightArr.push(myRand);
         this.barArr.push(newBar);``
@@ -70,7 +72,8 @@ function Stack(size) {
     for (var i = 0; i < this.barArr.length; i++) {
       ctx.fillStyle = this.barArr[i].color;
       // fillRect(x, y, width, height)
-      ctx.fillRect((4+i*11), 399, 10, this.barArr[i].height*-1);
+      // (x= start at 4, + i bars from left, +1 for a gap)
+      ctx.fillRect((4+i*(this.barWidth+1)), 399, this.barWidth, this.barArr[i].height*-1);
     } // for
   } // draw
 
