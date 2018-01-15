@@ -46,16 +46,17 @@ function Stack(size) {
   this.passCount = undefined;
   this.bar1 = undefined;
   this.bar2 = undefined;
-  this.barWidth = 10;
+  this.barWidth = undefined;
   this.sortingIndex = 0;
 
   // init adds random bars to the stack
   this.init = function() {
     console.log('init funk run');
-    // fill the the array with random but unique intergers
+    this.barWidth = Math.floor( ((800 - this.size - 1) / (this.size)) );  // canvas size - this.size for each 1 pixel gap / number of desired bars in stack
     this.swapCount = 0;
     this.passCount = 0;
     while (this.heightArr.length < this.size) {
+      // fill the the array with random but unique intergers
       var myRand = getRandomIntInclusive(1, maxBarHeight);
       if (this.heightArr.includes(myRand) === false) {
         var newBar = new Bar(this.barWidth);
