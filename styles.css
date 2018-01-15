@@ -7,7 +7,7 @@
 }
 @media screen and (min-width: 960px) {
   body {
-    background-color: lightgrey;
+    background-color: grey;
   }
 }
 
@@ -37,6 +37,7 @@
 
 #clock {
   font-size: 26px;
+  color: blue;
 }
 
 .canvas-container {
@@ -51,6 +52,7 @@
 }
 
 #canvas {
+  background-color: lightgrey;
   border-color: green;
   border-width: 4px;
   border-style: solid;
@@ -58,19 +60,58 @@
   margin: 10px;
 }
 
-.btn-group1 {
+
+/*
+INPUT INPUT
+INPUT INPUT
+INPUT INPUT
+*/
+
+
+
+.input-group1 {
   text-align: block;
 }
-
-.init, .draw, .sort, .reset, .step, .start {
+.init, .reset, .start {
   height: 32px;
+  border-width: 1px;
+  border-radius: 5px;
+  border-style: solid;
 }
-.init, .draw, .sort {
+.init {
+  color: blue;
   background-color: lightblue;
+  border-color: blue;
 }
 .reset {
-  background-color: white;
+  background-color: lightgrey;
+  border-color: black;
+  color: black;
 }
-.step, .start {
+.start {
   background-color: lightgreen;
+  color: green;
+  border-color: green;
+}
+
+/*
+remove stupid default button active shadow
+*/
+.btn:focus, .btn:active, .btn.active, .btn:focus:active {
+  background-image: none;
+  outline: 0;
+  -webkit-box-shadow: none;
+          box-shadow: none;
+}
+
+.txt-in {
+  width: 70px;
+}
+.input-item {
+  margin-left: auto;
+  margin-right: auto;
+}
+#bars {
+}
+#bar-width {
 }

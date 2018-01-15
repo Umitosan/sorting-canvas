@@ -15,11 +15,19 @@
 
     <div class="mc2">
       <div class="canvas-container">
-        <div class="btn-group1">
-          <button class="init" type="button">Init</button>
-          <button class="reset" type="button">Reset</button>
-          <button class="start" type="button">start</button>
-          <p>Seconds: <span id='clock'>0</span></p>
+        <div class="input-group1">
+          <button class="btn init">build stack</button>
+          <button class="btn reset">Reset</button>
+          <button class="btn start">start sorting</button>
+          <p>Seconds since page load: <span id='clock'>0</span></p>
+        </div>
+        <div class="input-group2">
+          <div class="input-item">
+            Bars: <input class="txt-in" id="bars" type="text" value="72">
+          </div>
+          <div class="input-item">
+            Bar width (pixels): <input class="txt-in" id="bar-width" type="text" value="72">
+          </div>
         </div>
         <canvas id="canvas" width="800" height="400"></canvas>
       </div>

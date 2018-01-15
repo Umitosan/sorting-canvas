@@ -1,7 +1,7 @@
 
 
 var myColors = new Colors(),
-    bubbleStack = new Stack(72);
+    bubbleStack = undefined;
 
 var canvasWidth = 800,
     canvas = undefined, // canvas must be defined here for backend functions
@@ -109,7 +109,7 @@ function Stack(size) {
       this.barArr[i+1].color = myColors.red;
       this.passCount += 1;
       this.sortingIndex = 0;
-      console.log('swapCount = ', this.swapCount);
+      // console.log('swapCount = ', this.swapCount);
       this.swapCount = 0;
     } else {
       this.sortingIndex += 1;
@@ -177,8 +177,11 @@ $(document).ready(function() {
   var gameInterval = undefined;
 
   $('.init').click(function() {
-    console.log('init-btn');
+    console.log('init');
+    var bars = $('#bars').val();
     clearCanvas();
+    bubbleStack = new Stack(72);
+    loopRunning = false;
     bubbleStack.reset();
     bubbleStack.init();
     myReq = requestAnimationFrame(gameLoop)
@@ -191,7 +194,6 @@ $(document).ready(function() {
   });
 
   $('.start').click(function() {
-    console.log('start');
     loopRunning = true;
   });
 
