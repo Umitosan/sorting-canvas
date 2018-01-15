@@ -20,10 +20,11 @@ function Colors() {
   this.darkGrey = 'rgba(50, 50, 50, 1)';
   this.lightGreyTrans = 'rgba(50, 50, 50, 0.3)';
   this.greyReset = 'rgb(211,211,211)';
+  this.lighterGreyReset = 'rgb(240,240,240)';
   this.white = 'rgba(250, 250, 250, 1)';
-  this.red = 'rgba(200, 0, 0, 1)';
-  this.green = 'rgba(0, 200, 0, 0.5)';
-  this.blue = 'rgba(0, 0, 200, 0.5)';
+  this.red = 'rgba(230, 0, 0, 1)';
+  this.green = 'rgba(0, 230, 0, 1)';
+  this.blue = 'rgba(0, 0, 230, 0.7)';
 }
 
 // a bar is single Bar object in a Stack
@@ -180,7 +181,7 @@ $(document).ready(function() {
     console.log('init');
     var bars = $('#bars').val();
     clearCanvas();
-    bubbleStack = new Stack(72);
+    bubbleStack = new Stack(bars);
     loopRunning = false;
     bubbleStack.reset();
     bubbleStack.init();

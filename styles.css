@@ -7,7 +7,7 @@
 }
 @media screen and (min-width: 960px) {
   body {
-    background-color: grey;
+    background-color: rgb(240,240,240);
   }
 }
 
@@ -21,6 +21,16 @@
   .head-title {
     text-align: center;
   }
+}
+
+
+#bg-img {
+  background-image: url('https://tinyurl.com/yaandgcj');
+  position: fixed;
+  z-index: -99;
+  opacity: 0.75;
+  min-height: 100%;
+  min-width: 100%;
 }
 
 .mc2 {
@@ -52,7 +62,7 @@
 }
 
 #canvas {
-  background-color: lightgrey;
+  background-color: rgb(240,240,240);
   border-color: green;
   border-width: 4px;
   border-style: solid;
