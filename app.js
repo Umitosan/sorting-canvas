@@ -8,7 +8,7 @@ var canvasWidth = 800,
     time = 0;
     myReq = undefined,
     lastFrameTimeMs = 0, // The last time the loop was run
-    maxFPS = 600, // The maximum FPS we want to allow
+    maxFPS = undefined, // The maximum FPS we want to allow
     loopRunning = false,
     maxBarHeight = 396;
 
@@ -58,11 +58,11 @@ function Stack(size) {
     while (this.heightArr.length < this.size) {
       // fill the the array with random but unique intergers
       var myRand = getRandomIntInclusive(1, maxBarHeight);
-      if (this.heightArr.includes(myRand) === false) {
+      if (this.heightArr.indexOf(myRand) === -1) { // rem: indexOf returns -1 when not found, also indexOf is supported in IE11 but not .includes
         var newBar = new Bar(this.barWidth);
         newBar.height = myRand;
         this.heightArr.push(myRand);
-        this.barArr.push(newBar);``
+        this.barArr.push(newBar);
       }
     } // while
   } // init
@@ -183,6 +183,7 @@ $(document).ready(function() {
     var bars = $('#bars').val();
     clearCanvas();
     bubbleStack = new Stack(bars);
+    maxFPS = $('#max-fps').val();
     loopRunning = false;
     bubbleStack.reset();
     bubbleStack.init();
