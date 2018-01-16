@@ -1,11 +1,13 @@
 
 
 var myColors = new Colors(),
-    bubbleStack = undefined;
+    bubbleStack = undefined,
+    sortedTxt = undefined;
 
 var canvasWidth = 800,
-    canvas = undefined, // canvas must be defined here for backend functions
-    time = 0;
+    // var canvas = document.getElementById('canvas');
+    canvas = $('#canvas')[0] , // canvas must be defined here for backend functions
+    time = 0,
     myReq = undefined,
     lastFrameTimeMs = 0, // The last time the loop was run
     maxFPS = undefined, // The maximum FPS we want to allow
@@ -25,6 +27,20 @@ function Colors() {
   this.red = 'rgba(230, 0, 0, 1)';
   this.green = 'rgba(0, 230, 0, 1)';
   this.blue = 'rgba(0, 0, 230, 0.7)';
+}
+
+function TxtBox() {
+  this.x = 370;
+  this.y = 50;
+  this.font = "32px Georgia";
+  this.color = myColors.blue;
+
+  this.draw = function() {
+    var ctx = canvas.getContext('2d');
+    ctx.font = this.font;
+    ctx.fillStyle = this.color;
+    ctx.fillText("Sorted!",this.x,this.y);
+  }
 }
 
 // a bar is single Bar object in a Stack
@@ -109,6 +125,8 @@ function Stack(size) {
     } else if (i > (this.size - 3 - this.passCount)) {  // Start a new pass on the stack
       this.barArr[i].color = myColors.red;
       this.barArr[i+1].color = myColors.red;
+      this.barArr[0].color = myColors.blue;
+      this.barArr[1].color = myColors.blue;
       this.passCount += 1;
       this.sortingIndex = 0;
       // console.log('swapCount = ', this.swapCount);
@@ -139,7 +157,6 @@ function getRandomIntInclusive(min, max) {
 }
 
 function clearCanvas() {
-  var canvas = $('#canvas')[0]; // var canvas = document.getElementById('canvas');
   canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
 }
 
@@ -151,8 +168,6 @@ function clockTimer() {
 //////////////////////////////////////////////////////////////////////////////////
 // GAME LOOP
 //////////////////////////////////////////////////////////////////////////////////
-
-
 function gameLoop(timestamp) {
     // Throttle the frame rate.
     // this effectively SHORT CIRCUITS the loop so that nothing is updated or drawn... UNLESS desired time as passed
@@ -164,6 +179,7 @@ function gameLoop(timestamp) {
     lastFrameTimeMs = timestamp;
     if ( (bubbleStack.sorted === false) && (loopRunning === true) ) { bubbleStack.update() };
     bubbleStack.draw();
+    if (bubbleStack.sorted === true) { sortedTxt.draw() };  // show sorted text if sorted
     myReq = requestAnimationFrame(gameLoop);
 }
 
@@ -182,6 +198,7 @@ $(document).ready(function() {
     console.log('init');
     var bars = $('#bars').val();
     clearCanvas();
+    sortedTxt = new TxtBox();
     bubbleStack = new Stack(bars);
     maxFPS = $('#max-fps').val();
     loopRunning = false;
