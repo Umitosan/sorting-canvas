@@ -212,6 +212,9 @@ $(document).ready(function() {
   $('.init').click(function() {
     console.log('init');
     var bars = $('#bars').val();
+    if ((bars < 1) || (bars > 390)) {
+      return;
+    }
     if (myReq !== undefined) {
       cancelAnimationFrame(myReq);
     } else {
