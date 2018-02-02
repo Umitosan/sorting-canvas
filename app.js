@@ -10,9 +10,11 @@ var canvasWidth = 800,
     time = 0,
     myReq = undefined,
     lastFrameTimeMs = 0, // The last time the loop was run
-    maxFPS = undefined, // The maximum FPS we want to allow
+    maxFPS, // The maximum FPS we want to allow
     loopRunning = false,
-    maxBarHeight = 396;
+    maxBarHeight = 396,
+    pageLoadTime,
+    sortStartTime;
 
 // see this for html names colors
 // https://www.w3schools.com/colors/colors_shades.asp
@@ -53,7 +55,7 @@ function Bar(barWidth) {
 }
 
 // a stack is a group of bars to be sorted
-function Stack(size) {
+function Stack(size, sortDuration = 10) {
   this.size = size;
   this.heightArr = [];
   this.barArr = [];
@@ -64,6 +66,9 @@ function Stack(size) {
   this.bar2 = undefined;
   this.barWidth = undefined;
   this.sortingIndex = 0;
+  this.sortDuration = sortDuration;
+  this.lastUpdateTime = 0;
+
 
   // init adds random bars to the stack
   this.init = function() {
@@ -84,7 +89,6 @@ function Stack(size) {
   } // init
 
   this.draw = function() {
-    clearCanvas();
     var ctx = canvas.getContext('2d');
     // draw each bar one at a time
     for (var i = 0; i < this.barArr.length; i++) {
@@ -99,15 +103,14 @@ function Stack(size) {
   // 1 update call only sorts 1 pair of bars in the stack
   this.update = function() {
     var i = this.sortingIndex;
-    // console.log('this.swapCount = ', this.swapCount);
-
-    if (i > 0) {  // turn last bars back to red
+    // turn last bars back to red
+    if (i > 0) {
       this.barArr[i].color = myColors.red;
       this.barArr[i-1].color = myColors.red;
       this.barArr[i].color = myColors.green;
       this.barArr[i+1].color = myColors.green;
     }
-
+    // compare and swap bars if needed
     if (this.barArr[i].height > this.barArr[i+1].height ) {
       var h1 = this.barArr[i].height;
       var h2 = this.barArr[i+1].height;
@@ -115,9 +118,10 @@ function Stack(size) {
       this.barArr[i+1].height = h1;
       this.swapCount += 1;
     }
-
+    // check if sorting is complete
     if ( (i > (this.size - 3 - this.passCount)) && (this.swapCount < 1) ) {
       console.log("Sorting Complete!");
+      console.log("sorting this stack took (sec): ", ( Math.round( (performance.now() - sortStartTime) * 100 ) / 100000) );
       this.sorted = true;
       loopRunning = false;
       this.barArr[i].color = myColors.red;
@@ -125,16 +129,14 @@ function Stack(size) {
     } else if (i > (this.size - 3 - this.passCount)) {  // Start a new pass on the stack
       this.barArr[i].color = myColors.red;
       this.barArr[i+1].color = myColors.red;
-      this.barArr[0].color = myColors.blue;
+      this.barArr[0].color = myColors.blue;  // only the first pair of bars show blue to indicate the start
       this.barArr[1].color = myColors.blue;
       this.passCount += 1;
       this.sortingIndex = 0;
-      // console.log('swapCount = ', this.swapCount);
       this.swapCount = 0;
     } else {
       this.sortingIndex += 1;
     }
-
   } // UPDATE
 
   this.reset = function() {
@@ -169,19 +171,30 @@ function clockTimer() {
 // GAME LOOP
 //////////////////////////////////////////////////////////////////////////////////
 function gameLoop(timestamp) {
-    // Throttle the frame rate.
-    // this effectively SHORT CIRCUITS the loop so that nothing is updated or drawn... UNLESS desired time as passed
-    if (timestamp < lastFrameTimeMs + (1000 / maxFPS)) {
-        myReq = requestAnimationFrame(gameLoop);
-        return;
-    }
+  // timestamp is automatically returnd from requestAnimationFrame
+  // timestamp uses performance.now() to compute the time
+  myReq = requestAnimationFrame(gameLoop);
 
-    lastFrameTimeMs = timestamp;
-    if ( (bubbleStack.sorted === false) && (loopRunning === true) ) { bubbleStack.update() };
-    bubbleStack.draw();
-    if (bubbleStack.sorted === true) { sortedTxt.draw() };  // show sorted text if sorted
-    myReq = requestAnimationFrame(gameLoop);
+  if ((!bubbleStack.sorted) && (loopRunning)) {
+    var now = performance.now()
+    if ( (now - bubbleStack.lastUpdateTime) >= bubbleStack.sortDuration ) {
+      var timesToUpdate = Math.floor( (now - bubbleStack.lastUpdateTime) / bubbleStack.sortDuration);
+      // console.log('timesToUpdate = ', timesToUpdate);
+      for (var i=0; i < timesToUpdate; i++) {
+        bubbleStack.update();
+        if (bubbleStack.sorted) { break };
+      }
+      bubbleStack.lastUpdateTime = performance.now();
+    }
+  };
+  clearCanvas();
+  bubbleStack.draw();
+  if (bubbleStack.sorted === true) {
+    sortedTxt.draw(); // show sorted text if sorted
+  };
 }
+
+
 
 //////////////////////////////////////////////////////////////////////////////////
 // FRONT
@@ -190,6 +203,8 @@ $(document).ready(function() {
   // canvas is instantiated above to be global
   canvas = $('#canvas')[0];
 
+  pageLoadTime = performance.now();
+
   setInterval(clockTimer, 1000);
 
   var gameInterval = undefined;
@@ -197,24 +212,33 @@ $(document).ready(function() {
   $('.init').click(function() {
     console.log('init');
     var bars = $('#bars').val();
+    if (myReq !== undefined) {
+      cancelAnimationFrame(myReq);
+    } else {
+      console.log("first game loop started");
+    }
     clearCanvas();
+    sortSpeed = parseInt( $('#sort-speed').val() );
     sortedTxt = new TxtBox();
-    bubbleStack = new Stack(bars);
-    maxFPS = $('#max-fps').val();
+    bubbleStack = new Stack(bars, sortSpeed);
     loopRunning = false;
     bubbleStack.reset();
     bubbleStack.init();
-    myReq = requestAnimationFrame(gameLoop)
+    bubbleStack.draw();
   });
 
   $('.reset').click(function() {
-    cancelAnimationFrame(myReq);
     clearCanvas();
     bubbleStack.reset();
+    cancelAnimationFrame(myReq);
   });
 
   $('.start').click(function() {
+    sortStartTime = performance.now();
+    console.log('sortStartTime = ', sortStartTime);
     loopRunning = true;
+    bubbleStack.lastUpdateTime = performance.now();
+    myReq = requestAnimationFrame(gameLoop);
   });
 
 });
