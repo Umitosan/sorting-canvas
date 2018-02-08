@@ -110,7 +110,7 @@ INPUT INPUT
 .input-group1 {
   text-align: block;
 }
-.init, .reset, .start {
+.init, .reset, .sort {
   width: 50px;
   height: 32px;
   border-width: 1px;
@@ -126,7 +126,7 @@ INPUT INPUT
     background-color: blue;
   }
 }
-.start {
+.sort {
   background-color: lightgreen;
   color: green;
   border-color: green;

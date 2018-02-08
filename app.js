@@ -31,17 +31,19 @@ function Colors() {
   this.blue = 'rgba(0, 0, 230, 0.7)';
 }
 
-function TxtBox() {
-  this.x = 370;
-  this.y = 50;
+function TxtBox(x,y,txt) {
+  this.x = x;
+  this.y = y;
   this.font = "32px Georgia";
   this.color = myColors.blue;
+  this.txt = txt;
 
   this.draw = function() {
     var ctx = canvas.getContext('2d');
     ctx.font = this.font;
     ctx.fillStyle = this.color;
-    ctx.fillText("Sorted!",this.x,this.y);
+    ctx.textAlign = 'center';
+    ctx.fillText(this.txt,this.x,this.y);
   };
 }
 
@@ -68,6 +70,8 @@ function Stack(size, sortDuration = 10) {
   this.sortingIndex = 0;
   this.sortDuration = sortDuration;
   this.lastUpdateTime = 0;
+  this.totalTimeToSort = 0;
+  this.txtBoxes = [];
 
 
   // init adds random bars to the stack
@@ -97,6 +101,13 @@ function Stack(size, sortDuration = 10) {
       // (x= start at 4, + i bars from left, +1 for a gap)
       ctx.fillRect((4+i*(this.barWidth+1)), 399, this.barWidth, this.barArr[i].height*-1);
     } // for
+    // draw each txt box
+    // if (this.txtBoxes.length > 0) {
+    //   console.log('this.txtBoxes = ', this.txtBoxes);
+    // }
+    for (let i=0; i < this.txtBoxes.length; i++) {
+      this.txtBoxes[i].draw();
+    }
   }; // draw
 
   // look at each pair once from bottom to top and swap them if needed
@@ -121,8 +132,11 @@ function Stack(size, sortDuration = 10) {
     // check if sorting is complete
     if ( (i > (this.size - 3 - this.passCount)) && (this.swapCount < 1) ) {
       console.log("Sorting Complete!");
-      console.log("sorting this stack took (sec): ", ( Math.round( (performance.now() - sortStartTime) * 100 ) / 100000) );
+      this.totalTimeToSort =  (Math.round( (performance.now() - sortStartTime) * 100 ) / 100000);
+      console.log('this.txtBoxes = ', this.txtBoxes);
       this.sorted = true;
+      this.txtBoxes.push( new TxtBox(canvasWidth/2,50,"Sort time:") );
+      this.txtBoxes.push( new TxtBox(canvasWidth/2,90,this.totalTimeToSort+" sec") );
       loopRunning = false;
       this.barArr[i].color = myColors.red;
       this.barArr[i+1].color = myColors.red;
@@ -138,18 +152,6 @@ function Stack(size, sortDuration = 10) {
       this.sortingIndex += 1;
     }
   }; // UPDATE
-
-  this.reset = function() {
-    loopRunning = false;
-    this.heightArr = [];
-    this.barArr = [];
-    this.sorted = false;
-    this.swapCount = undefined;
-    this.bar1 = undefined;
-    this.bar2 = undefined;
-    this.sortingIndex = 0;
-  };
-
 } // stack
 
 function getRandomIntInclusive(min, max) {
@@ -182,16 +184,13 @@ function gameLoop(timestamp) {
       // console.log('timesToUpdate = ', timesToUpdate);
       for (var i=0; i < timesToUpdate; i++) {
         bubbleStack.update();
-        if (bubbleStack.sorted) { break };
+        if (bubbleStack.sorted) { break; }
       }
       bubbleStack.lastUpdateTime = performance.now();
     }
   }
   clearCanvas();
   bubbleStack.draw();
-  if (bubbleStack.sorted === true) {
-    sortedTxt.draw(); // show sorted text if sorted
-  }
 }
 
 
@@ -210,7 +209,6 @@ $(document).ready(function() {
   var gameInterval = undefined;
 
   $('.init').click(function() {
-    console.log('init');
     var bars = $('#bars').val();
     if ((bars < 1) || (bars > 390)) {
       return;
@@ -222,28 +220,29 @@ $(document).ready(function() {
     }
     clearCanvas();
     sortSpeed = parseInt( $('#sort-speed').val() );
-    sortedTxt = new TxtBox();
     bubbleStack = new Stack(bars, sortSpeed);
     loopRunning = false;
-    bubbleStack.reset();
     bubbleStack.init();
     bubbleStack.draw();
   });
 
-  $('.reset').click(function() {
-    if (loopRunning) {
-      clearCanvas();
-      bubbleStack.reset();
-      cancelAnimationFrame(myReq);
+  $('.sort').click(function() {
+    if ( (!loopRunning) && (bubbleStack) && (!bubbleStack.sorted) )  {
+      sortStartTime = performance.now();
+      console.log('sortStartTime = ', sortStartTime);
+      loopRunning = true;
+      bubbleStack.lastUpdateTime = performance.now();
+      myReq = requestAnimationFrame(gameLoop);
     }
   });
 
-  $('.start').click(function() {
-    sortStartTime = performance.now();
-    console.log('sortStartTime = ', sortStartTime);
-    loopRunning = true;
-    bubbleStack.lastUpdateTime = performance.now();
-    myReq = requestAnimationFrame(gameLoop);
+  $('.reset').click(function() {
+    if (bubbleStack) {
+      clearCanvas();
+      loopRunning = false;
+      bubbleStack = undefined;
+      cancelAnimationFrame(myReq);
+    }
   });
 
 });
