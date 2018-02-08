@@ -1,4 +1,4 @@
-
+/*jshint esversion: 6 */
 
 var myColors = new Colors(),
     bubbleStack = undefined,
@@ -42,7 +42,7 @@ function TxtBox() {
     ctx.font = this.font;
     ctx.fillStyle = this.color;
     ctx.fillText("Sorted!",this.x,this.y);
-  }
+  };
 }
 
 // a bar is single Bar object in a Stack
@@ -86,7 +86,7 @@ function Stack(size, sortDuration = 10) {
         this.barArr.push(newBar);
       }
     } // while
-  } // init
+  }; // init
 
   this.draw = function() {
     var ctx = canvas.getContext('2d');
@@ -97,7 +97,7 @@ function Stack(size, sortDuration = 10) {
       // (x= start at 4, + i bars from left, +1 for a gap)
       ctx.fillRect((4+i*(this.barWidth+1)), 399, this.barWidth, this.barArr[i].height*-1);
     } // for
-  } // draw
+  }; // draw
 
   // look at each pair once from bottom to top and swap them if needed
   // 1 update call only sorts 1 pair of bars in the stack
@@ -137,7 +137,7 @@ function Stack(size, sortDuration = 10) {
     } else {
       this.sortingIndex += 1;
     }
-  } // UPDATE
+  }; // UPDATE
 
   this.reset = function() {
     loopRunning = false;
@@ -148,7 +148,7 @@ function Stack(size, sortDuration = 10) {
     this.bar1 = undefined;
     this.bar2 = undefined;
     this.sortingIndex = 0;
-  }
+  };
 
 } // stack
 
@@ -176,7 +176,7 @@ function gameLoop(timestamp) {
   myReq = requestAnimationFrame(gameLoop);
 
   if ((!bubbleStack.sorted) && (loopRunning)) {
-    var now = performance.now()
+    var now = performance.now();
     if ( (now - bubbleStack.lastUpdateTime) >= bubbleStack.sortDuration ) {
       var timesToUpdate = Math.floor( (now - bubbleStack.lastUpdateTime) / bubbleStack.sortDuration);
       // console.log('timesToUpdate = ', timesToUpdate);
@@ -186,12 +186,12 @@ function gameLoop(timestamp) {
       }
       bubbleStack.lastUpdateTime = performance.now();
     }
-  };
+  }
   clearCanvas();
   bubbleStack.draw();
   if (bubbleStack.sorted === true) {
     sortedTxt.draw(); // show sorted text if sorted
-  };
+  }
 }
 
 
@@ -231,9 +231,11 @@ $(document).ready(function() {
   });
 
   $('.reset').click(function() {
-    clearCanvas();
-    bubbleStack.reset();
-    cancelAnimationFrame(myReq);
+    if (loopRunning) {
+      clearCanvas();
+      bubbleStack.reset();
+      cancelAnimationFrame(myReq);
+    }
   });
 
   $('.start').click(function() {

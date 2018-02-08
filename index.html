@@ -3,26 +3,26 @@
   <head>
     <meta charset="utf-8">
     <title>sorting factory</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css?family=PT+Sans|Roboto" rel="stylesheet">
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script type="text/javascript" src="app.js"></script>
   </head>
   <body>
 
     <div id='bg-img'>
-
     </div>
 
     <div class="mc1">
-      <h1 class="head-title">THE BUBBLE SORT</h1>
+      <p class="head-title">Bubble Sort</p>
     </div>
 
     <div class="mc2">
       <div class="canvas-container">
         <div class="input-group1">
-          <button class="btn init">build stack</button>
+          <button class="btn init">Build</button>
+          <button class="btn start">Sort</button>
           <button class="btn reset">Reset</button>
-          <button class="btn start">start sorting</button>
           <p>Seconds since page load: <span id='clock'>0</span></p>
         </div>
         <div class="input-group2">
@@ -30,7 +30,7 @@
             Bars in Stack: <input class="txt-in" id="bars" type="number" value="53" min="1" max="390"> (1-390)
           </div>
           <div class="input-item">
-            Sort Speed: <input class="txt-in" id="sort-speed" type="number" value="10" min="1" max="10"> (milliseconds per swap)
+            Sort Speed: <input class="txt-in" id="sort-speed" type="number" value="10" min="1" max="10"> (milliseconds per swap, lower is faster)
           </div>
         </div>
         <canvas id="canvas" width="800" height="400"></canvas>

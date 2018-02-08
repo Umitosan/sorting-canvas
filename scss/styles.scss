@@ -1,4 +1,7 @@
-
+// $bg-img: url('http://eskipaper.com/images/gradient-background-1.jpg');
+$bg-grey: rgb(240,240,240);
+$roboto: 'Roboto', sans-serif;
+$ptsans: 'PT Sans', sans-serif;
 
 @media screen and (min-width: 1px) and (max-width: 960px) {
   body {
@@ -7,7 +10,7 @@
 }
 @media screen and (min-width: 960px) {
   body {
-    background-color: rgb(240,240,240);
+    background-color: $bg-grey;
   }
 }
 
@@ -23,26 +26,46 @@
   }
 }
 
+html, body {
+    margin: 0;
+    padding: 0;
+}
+body {
+  margin-top: -35px;
+  background-image: radial-gradient( #aad9cd, #a3d6a7 );
+}
 
-#bg-img {
-  background-image: url('https://tinyurl.com/yaandgcj');
-  position: fixed;
-  z-index: -99;
-  opacity: 0.75;
-  min-height: 100%;
-  min-width: 100%;
+// #bg-img {
+//   // background-image: $bg-img;
+//   background-image: radial-gradient( white, lightgreen );
+//   position: fixed;
+//   z-index: -99;
+//   opacity: 0.75;
+//   min-height: 100%;
+//   min-width: 100%;
+// }
+
+.mc1 {
+  margin-top: 0px;
+  padding-top: 35px;
+  font-family: $ptsans;
+  font-size: 35px;
 }
 
 .mc2 {
+  font-family: $roboto;
+  font-size: 14px;
   width: 1000px;
   margin-left: auto;
   margin-right: auto;
   text-align: center;
-}
-
-.mc2 p  {
-  display: inline-block;
-  margin-left: 30px;
+  p  {
+    display: inline-block;
+    margin-left: 30px;
+  }
+  button {
+    font-family: inherit;
+  }
 }
 
 #clock {
@@ -56,17 +79,17 @@
   margin-right: auto;
   border-color: black;
   border-style: solid;
-  border-width: 8px;
-  border-radius: 20px;
+  border-width: 4px;
+  border-radius: 6px;
   padding: 10px;
 }
 
 #canvas {
   background-color: rgb(240,240,240);
   border-color: green;
-  border-width: 4px;
+  border-width: 2px;
   border-style: solid;
-  border-radius: 10px;
+  border-radius: 6px;
   margin: 10px;
 }
 
@@ -88,26 +111,40 @@ INPUT INPUT
   text-align: block;
 }
 .init, .reset, .start {
+  width: 50px;
   height: 32px;
   border-width: 1px;
-  border-radius: 5px;
+  border-radius: 3px;
   border-style: solid;
 }
 .init {
   color: blue;
   background-color: lightblue;
   border-color: blue;
-}
-.reset {
-  background-color: lightgrey;
-  border-color: black;
-  color: black;
+  &:hover {
+    color: white;
+    background-color: blue;
+  }
 }
 .start {
   background-color: lightgreen;
   color: green;
   border-color: green;
+  &:hover {
+    color: white;
+    background-color: green;
+  }
 }
+.reset {
+  background-color: lightgrey;
+  border-color: black;
+  color: black;
+  &:hover {
+    color: white;
+    background-color: black;
+  }
+}
+
 
 
 .txt-in {

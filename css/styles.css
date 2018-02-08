@@ -1,0 +1,117 @@
+@media screen and (min-width: 1px) and (max-width: 960px) {
+  body {
+    background-color: lightgreen; } }
+@media screen and (min-width: 960px) {
+  body {
+    background-color: #f0f0f0; } }
+@media screen and (min-width: 1px) and (max-width: 1020px) {
+  .head-title {
+    width: 1000px;
+    text-align: center; } }
+@media screen and (min-width: 1021px) {
+  .head-title {
+    text-align: center; } }
+html, body {
+  margin: 0;
+  padding: 0; }
+
+body {
+  margin-top: -35px;
+  background-image: radial-gradient(#aad9cd, #a3d6a7); }
+
+.mc1 {
+  margin-top: 0px;
+  padding-top: 35px;
+  font-family: "PT Sans", sans-serif;
+  font-size: 35px; }
+
+.mc2 {
+  font-family: "Roboto", sans-serif;
+  font-size: 14px;
+  width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center; }
+  .mc2 p {
+    display: inline-block;
+    margin-left: 30px; }
+  .mc2 button {
+    font-family: inherit; }
+
+#clock {
+  font-size: 26px;
+  color: blue; }
+
+.canvas-container {
+  width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+  border-color: black;
+  border-style: solid;
+  border-width: 4px;
+  border-radius: 6px;
+  padding: 10px; }
+
+#canvas {
+  background-color: #f0f0f0;
+  border-color: green;
+  border-width: 2px;
+  border-style: solid;
+  border-radius: 6px;
+  margin: 10px; }
+
+/*
+INPUT INPUT
+INPUT INPUT
+INPUT INPUT
+*/
+/* remove default button active shadow */
+.btn:focus, .btn:active, .btn.active, .btn:focus:active {
+  background-image: none;
+  outline: 0;
+  -webkit-box-shadow: none;
+  box-shadow: none; }
+
+.input-group1 {
+  text-align: block; }
+
+.init, .reset, .start {
+  width: 50px;
+  height: 32px;
+  border-width: 1px;
+  border-radius: 3px;
+  border-style: solid; }
+
+.init {
+  color: blue;
+  background-color: lightblue;
+  border-color: blue; }
+  .init:hover {
+    color: white;
+    background-color: blue; }
+
+.start {
+  background-color: lightgreen;
+  color: green;
+  border-color: green; }
+  .start:hover {
+    color: white;
+    background-color: green; }
+
+.reset {
+  background-color: lightgrey;
+  border-color: black;
+  color: black; }
+  .reset:hover {
+    color: white;
+    background-color: black; }
+
+.txt-in {
+  width: 50px; }
+
+.input-item {
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 2px; }
+
+/*# sourceMappingURL=styles.css.map */
