@@ -173,6 +173,9 @@ function clockTimer() {
 // GAME LOOP
 //////////////////////////////////////////////////////////////////////////////////
 function gameLoop(timestamp) {
+  // if (first time) {
+  //   bubbleStack.lastUpdateTime = performance.now();
+  // }
   // timestamp is automatically returnd from requestAnimationFrame
   // timestamp uses performance.now() to compute the time
   myReq = requestAnimationFrame(gameLoop);
@@ -180,8 +183,7 @@ function gameLoop(timestamp) {
   if ((!bubbleStack.sorted) && (loopRunning)) {
     var now = performance.now();
     if ( (now - bubbleStack.lastUpdateTime) >= bubbleStack.sortDuration ) {
-      var timesToUpdate = Math.floor( (now - bubbleStack.lastUpdateTime) / bubbleStack.sortDuration);
-      // console.log('timesToUpdate = ', timesToUpdate);
+      var timesToUpdate = Math.ceil( (now - bubbleStack.lastUpdateTime) / bubbleStack.sortDuration);
       for (var i=0; i < timesToUpdate; i++) {
         bubbleStack.update();
         if (bubbleStack.sorted) { break; }
@@ -219,7 +221,8 @@ $(document).ready(function() {
       console.log("first game loop started");
     }
     clearCanvas();
-    sortSpeed = parseInt( $('#sort-speed').val() );
+    sortSpeed = parseFloat( $('#sort-speed').val() );
+    // console.log("sortSpeed = ", sortSpeed);
     bubbleStack = new Stack(bars, sortSpeed);
     loopRunning = false;
     bubbleStack.init();
@@ -232,6 +235,7 @@ $(document).ready(function() {
       console.log('sortStartTime = ', sortStartTime);
       loopRunning = true;
       bubbleStack.lastUpdateTime = performance.now();
+      console.log("bubbleStack.lastUpdateTime = ", bubbleStack.lastUpdateTime);
       myReq = requestAnimationFrame(gameLoop);
     }
   });
