@@ -1,18 +1,19 @@
 /*jshint esversion: 6 */
 
 var myColors = new Colors(),
-    bubbleStack = undefined,
-    sortedTxt = undefined;
+    bubbleStack,
+    sortedTxt;
 
-var canvasWidth = 800,
+var canvasWidth = 820,
+    canvasHeight = 420,
     // var canvas = document.getElementById('canvas');
     canvas = $('#canvas')[0] , // canvas must be defined here for backend functions
     time = 0,
-    myReq = undefined,
+    myReq,
     lastFrameTimeMs = 0, // The last time the loop was run
     maxFPS, // The maximum FPS we want to allow
     loopRunning = false,
-    maxBarHeight = 396,
+    maxBarHeight = canvasHeight - 10,
     pageLoadTime,
     sortStartTime;
 
@@ -51,7 +52,7 @@ function TxtBox(x,y,txt) {
 function Bar(barWidth) {
   this.color = myColors.red;
   this.x = 0;
-  this.y = 399;
+  this.y = canvasHeight - 1;
   this.height = 0;
   this.width = barWidth;
 }
@@ -77,7 +78,8 @@ function Stack(size, sortDuration = 10) {
   // init adds random bars to the stack
   this.init = function() {
     console.log('init funk run');
-    this.barWidth = Math.floor( ((800 - this.size - 1) / (this.size)) );  // canvas size - this.size for each 1 pixel gap / number of desired bars in stack
+    this.barWidth = Math.floor( ((canvasWidth - this.size - 1) / (this.size)) );  // canvas size - this.size for each 1 pixel gap / number of desired bars in stack
+    console.log("barWidth = ", this.barWidth);
     this.swapCount = 0;
     this.passCount = 0;
     while (this.heightArr.length < this.size) {
@@ -89,7 +91,12 @@ function Stack(size, sortDuration = 10) {
         this.heightArr.push(myRand);
         this.barArr.push(newBar);
       }
+      if (this.heightArr.length === this.size) {
+        console.log('init while needs to end');
+        return;
+      }
     } // while
+    console.log('Statck.init finished');
   }; // init
 
   this.draw = function() {
@@ -99,12 +106,9 @@ function Stack(size, sortDuration = 10) {
       ctx.fillStyle = this.barArr[i].color;
       // fillRect(x, y, width, height)
       // (x= start at 4, + i bars from left, +1 for a gap)
-      ctx.fillRect((4+i*(this.barWidth+1)), 399, this.barWidth, this.barArr[i].height*-1);
+      ctx.fillRect((4+i*(this.barWidth+1)), canvasHeight-1, this.barWidth, this.barArr[i].height*-1);
     } // for
     // draw each txt box
-    // if (this.txtBoxes.length > 0) {
-    //   console.log('this.txtBoxes = ', this.txtBoxes);
-    // }
     for (let i=0; i < this.txtBoxes.length; i++) {
       this.txtBoxes[i].draw();
     }
@@ -133,7 +137,6 @@ function Stack(size, sortDuration = 10) {
     if ( (i > (this.size - 3 - this.passCount)) && (this.swapCount < 1) ) {
       console.log("Sorting Complete!");
       this.totalTimeToSort =  (Math.round( (performance.now() - sortStartTime) * 100 ) / 100000);
-      console.log('this.txtBoxes = ', this.txtBoxes);
       this.sorted = true;
       this.txtBoxes.push( new TxtBox(canvasWidth/2,50,"Sort time:") );
       this.txtBoxes.push( new TxtBox(canvasWidth/2,90,this.totalTimeToSort+" sec") );
@@ -208,11 +211,11 @@ $(document).ready(function() {
 
   setInterval(clockTimer, 1000);
 
-  var gameInterval = undefined;
+  var gameInterval;
 
   $('.init').click(function() {
     var bars = $('#bars').val();
-    if ((bars < 1) || (bars > 390)) {
+    if ((bars < 2) || (bars > 400)) {
       return;
     }
     if (myReq !== undefined) {
@@ -222,7 +225,6 @@ $(document).ready(function() {
     }
     clearCanvas();
     sortSpeed = parseFloat( $('#sort-speed').val() );
-    // console.log("sortSpeed = ", sortSpeed);
     bubbleStack = new Stack(bars, sortSpeed);
     loopRunning = false;
     bubbleStack.init();
