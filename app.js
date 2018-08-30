@@ -213,7 +213,9 @@ $(document).ready(function() {
 
   var gameInterval;
 
-  $('.init').click(function() {
+  build();
+
+  function build() {
     var bars = $('#bars').val();
     if ((bars < 2) || (bars > 400)) {
       return;
@@ -221,7 +223,7 @@ $(document).ready(function() {
     if (myReq !== undefined) {
       cancelAnimationFrame(myReq);
     } else {
-      console.log("first game loop started");
+      console.log("no animation loop running");
     }
     clearCanvas();
     sortSpeed = parseFloat( $('#sort-speed').val() );
@@ -229,6 +231,10 @@ $(document).ready(function() {
     loopRunning = false;
     bubbleStack.init();
     bubbleStack.draw();
+  }
+
+  $('.build').click(function() {
+    build();
   });
 
   $('.sort').click(function() {
