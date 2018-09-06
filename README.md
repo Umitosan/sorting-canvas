@@ -2,6 +2,8 @@
 
 This project showcases a few of the common sorting methods.  This site is also a great way for me to learn how to use the HTML5 canvas and explore game mechanics, animations, and performance.
 
+* View Live [HERE](http://sort.dombrown.net/)
+
 ## Sorting algorithms covered
 
 * Bubble
